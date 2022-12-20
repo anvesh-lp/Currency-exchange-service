@@ -1,6 +1,7 @@
 package com.microservices.currencyexchangeservice.controllers;
 
 import com.microservices.currencyexchangeservice.model.CurrencyExchange;
+import com.microservices.currencyexchangeservice.repositories.CurrencyExcahangeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +16,19 @@ public class CurrecnyExchangeController {
     @Autowired
     private Environment environment;
 
+    private final CurrencyExcahangeRepo currencyExcahange;
+
+    public CurrecnyExchangeController(CurrencyExcahangeRepo currencyExcahange) {
+        this.currencyExcahange = currencyExcahange;
+    }
+
     @GetMapping("/currency-exchange/{from}/to/{to}")
     public CurrencyExchange retrieveExchangeValue(@PathVariable String from, @PathVariable String to) {
 
-        CurrencyExchange currencyExchange = new CurrencyExchange(100L, from, to, BigDecimal.valueOf(50));
+        CurrencyExchange currencyExchange = currencyExcahange.findByFromAndTo(from, to);
+        if (currencyExchange == null) {
+            throw new RuntimeException("Unable to find the data " + from + " to " + to);
+        }
         String port = environment.getProperty("local.server.port");
         currencyExchange.setEnvironment(port);
         return currencyExchange;
