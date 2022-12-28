@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.microservices</groupId>
-    <artifactId>Currency-exchange-service</artifactId>
+    <artifactId>currency-exchange-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Currency-exchange-service</name>
     <description>Currency-exchange-service</description>
@@ -94,7 +94,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
                 <configuration>
+                    <image>
+                        <name>anveshlp/mmv2-${project.artifactId}:${project.version}</name>
+                    </image>
+                    <pullPolicy>IF_NOT_PRESENT</pullPolicy>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
